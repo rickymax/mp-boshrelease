@@ -1,8 +1,12 @@
 ---
 name: magic-power
 
-templates: {}
+templates:
+  ctl.erb: bin/ctl
 
-packages: []
+packages:
+- python_2.7
+- magic_power
+- cli
 
 properties: {}
