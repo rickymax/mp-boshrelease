@@ -31,6 +31,7 @@ case $1 in
 
   stop)
     PID=$(head -1 $PIDFILE)
+    kill -9 `ps -o pid --no-headers --ppid $PID`
     kill -9 $PID
     rm -f $PIDFILE
     set -e
