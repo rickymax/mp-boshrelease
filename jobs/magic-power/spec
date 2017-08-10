@@ -6,7 +6,6 @@ templates:
 
 packages:
 - python_2.7
-- magic_power
-- cli
+- magic-power
 
 properties: {}
