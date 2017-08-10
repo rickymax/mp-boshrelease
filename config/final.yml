@@ -1,1 +1,6 @@
-name: mp-boshrelease
+---
+final_name: mp-release
+blobstore:
+  provider: local
+  options:
+    blobstore_path: /tmp/magic-power-blobs
