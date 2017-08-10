@@ -1,0 +1,5 @@
+check process magic-power
+  with pidfile /var/vcap/sys/run/magic-power/pid
+  start program "/var/vcap/jobs/magic-power/bin/ctl start"
+  stop program "/var/vcap/jobs/magic-power/bin/ctl stop"
+  group vcap
