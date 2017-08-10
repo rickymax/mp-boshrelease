@@ -1,1 +1,43 @@
+#!/bin/bash
 
+RUN_DIR=/var/vcap/sys/run/magic-power
+LOG_DIR=/var/vcap/sys/log/magic-power
+PIDFILE=${RUN_DIR}/pid
+
+# Setup ENVs
+export LD_LIBRARY_PATH=/var/vcap/packages/python_2.7/lib:$LD_LIBRARY_PATH
+export C_INCLUDE_PATH=/var/vcap/packages/python_2.7/include:$C_INCLUDE_PATH
+
+case $1 in
+
+  start)
+    mkdir -p $RUN_DIR $LOG_DIR
+    chown -RH vcap:vcap $RUN_DIR $LOG_DIR
+
+    if [ -f $PIDFILE ];
+    then
+        echo 'There is already a running job magic-power.'
+    else
+        echo $$ > $PIDFILE
+
+        cd /var/vcap/packages/magic-power
+
+        source venv/bin/activate
+
+        exec python run.py
+    fi
+
+    ;;
+
+  stop)
+    PID=$(head -1 $PIDFILE)
+    kill -9 $PID
+    rm -f $PIDFILE
+    set -e
+
+    ;;
+
+  *)
+    echo "Usage: ctl {start|stop}" ;;
+
+esac
