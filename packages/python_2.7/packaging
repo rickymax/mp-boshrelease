@@ -1,1 +1,28 @@
-set -e
+set -e # abort script on any command that exits with a non zero value
+set -x # report the usage of uninitialized variables
+
+
+PYTHON_VERSION=2.7.11
+
+
+# Detect number of CPUs so make jobs can be parallelized
+CPUS=$(grep -c ^processor /proc/cpuinfo)
+
+echo "Extracting python..."
+tar xzf python_2.7/Python-${PYTHON_VERSION}.tgz
+
+echo "Building python..."
+pushd Python-${PYTHON_VERSION}
+  ./configure \
+    --prefix=${BOSH_INSTALL_TARGET} \
+    --with-ensurepip
+
+  make -j${CPUS}
+  make install
+popd
+
+echo "Installing necessary packages..."
+${BOSH_INSTALL_TARGET}/bin/pip install --upgrade python_2.7/wheel-0.29.0-py2.py3-none-any.whl
+${BOSH_INSTALL_TARGET}/bin/pip install --upgrade python_2.7/pip-8.1.1-py2.py3-none-any.whl
+${BOSH_INSTALL_TARGET}/bin/pip install --upgrade python_2.7/setuptools-20.9.0-py2.py3-none-any.whl
+${BOSH_INSTALL_TARGET}/bin/pip install --upgrade python_2.7/virtualenv-15.0.1-py2.py3-none-any.whl
