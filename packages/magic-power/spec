@@ -1,6 +1,8 @@
 ---
 name: magic-power
 
-dependencies: []
+dependencies:
+- python_2.7
 
-files: []
+files:
+- magic-power/**/*
