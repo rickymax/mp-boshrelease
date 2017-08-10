@@ -1,6 +1,8 @@
 import datetime
 
-from magic-power import app
+from flask import jsonify
+
+from magic_power import app
 
 
 @app.route('/', methods = ['GET'])
