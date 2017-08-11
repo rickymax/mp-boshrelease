@@ -7,38 +7,41 @@ PIDFILE=${RUN_DIR}/pid
 # Setup ENVs
 export LD_LIBRARY_PATH=/var/vcap/packages/python_2.7/lib:$LD_LIBRARY_PATH
 export C_INCLUDE_PATH=/var/vcap/packages/python_2.7/include:$C_INCLUDE_PATH
+export PATH=$PATH:/usr/local/bin
 
 case $1 in
 
-  start)
-    mkdir -p $RUN_DIR $LOG_DIR
-    chown -RH vcap:vcap $RUN_DIR $LOG_DIR
+    start)
+        mkdir -p $RUN_DIR $LOG_DIR
+        chown -RH vcap:vcap $RUN_DIR $LOG_DIR
 
-    if [ -f $PIDFILE ];
-    then
-        echo 'There is already a running job magic-power.'
-    else
-        echo $$ > $PIDFILE
+        if [ -f $PIDFILE ];
+        then
+            echo 'There is already a running job magic-power.'
+        else
+            echo $$ > $PIDFILE
 
         cd /var/vcap/packages/magic-power
 
         source venv/bin/activate
 
-        exec python run.py
-    fi
+        exec python run.py \
+            >>  $LOG_DIR/magic-power.stdout.log \
+            2>> $LOG_DIR/magic-power.stderr.log
+        fi
 
-    ;;
+        ;;
 
-  stop)
-    PID=$(head -1 $PIDFILE)
-    kill -9 `ps -o pid --no-headers --ppid $PID`
-    kill -9 $PID
-    rm -f $PIDFILE
-    set -e
+    stop)
+        PID=$(head -1 $PIDFILE)
+        kill -9 `ps -o pid --no-headers --ppid $PID`
+        kill -9 $PID
+        rm -f $PIDFILE
+        set -e
 
-    ;;
+        ;;
 
-  *)
-    echo "Usage: ctl {start|stop}" ;;
+    *)
+        echo "Usage: ctl {start|stop}" ;;
 
 esac
