@@ -1,0 +1,61 @@
+---
+director_uuid: DIRECTOR_UUID
+
+name: magic_power
+
+releases:
+- {name: mp-release, version: latest}
+
+networks:
+- name: default
+  subnets:
+  - range: 192.168.100.0/24
+    gateway: 192.168.100.1
+    dns: [8.8.8.8]
+    reserved: # BOSH does not assign IPs from this range to any VM
+    - 192.168.100.2 - 192.168.100.239
+    - 192.168.100.249 - 192.168.100.250
+    static:   # BOSH assigns IPs from this range to jobs requesting static IPs
+    - 192.168.100.240 - 192.168.100.243
+    cloud_properties:
+      net_id: e3fc624a-cdbc-4ec9-b6c1-d9316f0c41ad # OpenStack network ID
+      subnet: 15da4c5c-6ace-4638-9788-ee68e2293bec # OpenStack subnet ID
+
+resource_pools:
+- name: default
+  stemcell:
+    name: bosh-openstack-kvm-ubuntu-trusty-go_agent-raw
+    version: 3312.23
+  network: default
+  cloud_properties:
+    instance_type: m1.small
+
+compilation:
+  workers: 1
+  network: default
+  cloud_properties:
+    instance_type: m1.small
+
+update:
+  canaries: 1
+  max_in_flight: 2
+  canary_watch_time: 1000-30000
+  update_watch_time: 1000-30000
+
+jobs:
+- name: magic_power
+  instances: 1
+  templates:
+  - {name: cf-helper, release: mp-release}
+  - {name: magic-power, release: mp-release}
+  resource_pool: default
+  networks:
+  - name: default
+
+properties:
+  cf-helper:
+    api_url: API_URL
+    username: USERNAME
+    password: PASSWORD
+    org: ORG
+    space: SPACE
