@@ -3,7 +3,7 @@ import datetime
 from flask import jsonify
 
 from magic_power import app
-from magic_power.services import manage
+from services import manage
 
 
 class InvalidUsage(Exception):
