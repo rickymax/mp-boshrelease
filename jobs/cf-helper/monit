@@ -1,0 +1,5 @@
+check process cf-helper
+  with pidfile /var/vcap/sys/run/cf-helper/pid
+  start program "/var/vcap/jobs/cf-helper/bin/ctl start"
+  stop program "/var/vcap/jobs/cf-helper/bin/ctl stop"
+  group vcap

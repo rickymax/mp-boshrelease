@@ -1,0 +1,21 @@
+---
+name: cf-helper
+
+templates:
+  ctl.erb: bin/ctl
+
+packages:
+- magic-power
+- cli
+
+properties:
+  cf-helper.api_url:
+    description: "Cloud Foundry API URL"
+  cf-helper.username:
+    description: "Cloud Foundry Username"
+  cf-helper.password:
+    description: "Cloud Foundry Password"
+  cf-helper.org:
+    description: "Cloud Foundry Organization"
+  cf-helper.space:
+    description: "Cloud Foundry Space"

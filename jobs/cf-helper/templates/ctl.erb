@@ -1,0 +1,58 @@
+#!/bin/bash
+
+RUN_DIR=/var/vcap/sys/run/cf-helper
+LOG_DIR=/var/vcap/sys/log/cf-helper
+PIDFILE=${RUN_DIR}/pid
+
+# Setup ENVs
+export PATH=$PATH:/usr/local/bin
+
+case $1 in
+
+  start)
+    mkdir -p $RUN_DIR $LOG_DIR
+    chown -RH vcap:vcap $RUN_DIR $LOG_DIR
+
+    if [ -f $PIDFILE ];
+    then
+        echo 'There is already a running job cf-helper.'
+    else
+        cp /var/vcap/packages/cli/bin/cf /usr/local/bin
+
+        echo $$ > $PIDFILE
+
+        cd /var/vcap/packages/magic-power
+
+        while :
+        do
+            cf login --skip-ssl-validation \
+                -a <%= p('cf-helper.api_url') %> \
+                -u <%= p('cf-helper.username') %> \
+                -p <%= p('cf-helper.password') %> \
+                -o <%= p('cf-helper.org') %> \
+                -s <%= p('cf-helper.space') %>
+
+            if [ $? -eq 0 ]; then
+                # TODO: set sleep time according to properties.uaa.cf.access-token-validity
+                sleep 7199
+            else
+                exit 1
+            fi
+        done
+    fi
+
+    ;;
+
+  stop)
+    PID=$(head -1 $PIDFILE)
+    kill -9 `ps -o pid --no-headers --ppid $PID`
+    kill -9 $PID
+    rm -f $PIDFILE
+    set -e
+
+    ;;
+
+  *)
+    echo "Usage: ctl {start|stop}" ;;
+
+esac
