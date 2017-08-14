@@ -3,6 +3,7 @@ name: cf-helper
 
 templates:
   ctl.erb: bin/ctl
+  config/cf.json.erb: config/cf.json
 
 packages:
 - magic-power
