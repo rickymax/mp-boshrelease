@@ -1,0 +1,5 @@
+---
+name: bosh-cli
+
+files:
+- bosh-cli/bosh-cli-2.0.28-linux-amd64

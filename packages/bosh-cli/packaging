@@ -1,0 +1,12 @@
+set -e # abort script on any command that exits with a non zero value
+set -x # report the usage of uninitialized variables
+
+cd bosh-cli
+
+chmod +x bosh-cli-*
+
+BIN_DIR=${BOSH_INSTALL_TARGET}/bin
+
+mkdir -p ${BIN_DIR}
+
+cp bosh-cli-* ${BIN_DIR}/bosh

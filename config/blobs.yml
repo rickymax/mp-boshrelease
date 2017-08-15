@@ -1,3 +1,6 @@
+bosh-cli/bosh-cli-2.0.28-linux-amd64:
+  size: 27190334
+  sha: 7b7629fcdf8839cf29bf25d97e8ea6beb3b9a7b2
 cli/cf-cli_6.26.0_linux_x86-64.tgz:
   size: 5174999
   sha: 6fe2df0ef09820a3a46db5cac9152fb8f1ecca02
