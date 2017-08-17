@@ -1,0 +1,11 @@
+set -e # abort script on any command that exits with a non zero value
+set -x # report the usage of uninitialized variables
+
+tar xzf libyaml/yaml-0.1.7.tar.gz
+
+cd yaml-0.1.7
+
+./configure --prefix=${BOSH_INSTALL_TARGET}
+
+make
+make install

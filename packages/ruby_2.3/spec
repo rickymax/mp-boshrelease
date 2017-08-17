@@ -1,0 +1,10 @@
+
+---
+name: ruby_2.3
+
+dependencies:
+  - libyaml
+
+files:
+- ruby_2.3/ruby-2.3.3.tar.gz
+- ruby_2.3/bundler-1.14.6.gem
