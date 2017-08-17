@@ -1,0 +1,23 @@
+---
+name: bosh-helper
+
+templates:
+  ctl.erb: bin/ctl
+  config/root_ca_certificate.erb: config/root_ca_certificate
+  config/director_credentials.erb: config/director_credentials
+  config/bosh.json.erb: config/bosh.json
+
+packages:
+- magic-power
+- bosh-cli
+- cli
+
+properties:
+  bosh-helper.url:
+    description: "BOSH Director URL"
+  bosh-helper.username:
+    description: "BOSH Username"
+  bosh-helper.password:
+    description: "BOSH Password"
+  bosh-helper.ca_cert:
+    description: "BOSH CA Certificate"

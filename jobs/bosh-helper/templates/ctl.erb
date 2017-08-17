@@ -1,0 +1,63 @@
+#!/bin/bash
+
+RUN_DIR=/var/vcap/sys/run/bosh-helper
+LOG_DIR=/var/vcap/sys/log/bosh-helper
+PIDFILE=${RUN_DIR}/pid
+
+# Setup ENVs
+export PATH=/usr/local/bin:$PATH
+
+case $1 in
+
+    start)
+        mkdir -p $RUN_DIR $LOG_DIR
+        chown -RH vcap:vcap $RUN_DIR $LOG_DIR
+
+        if [ -f $PIDFILE ];
+        then
+            echo 'There is already a running job bosh-helper.'
+        else
+            cp /var/vcap/packages/bosh-cli/bin/bosh /usr/local/bin
+
+            echo $$ > $PIDFILE
+
+            cd /var/vcap/packages/magic-power
+
+            while :
+            do
+                # TODO: automatic target and log into director
+                #bosh -e <%= p('bosh-helper.url') %> \
+                #    alias-env vbox \
+                #    --ca-cert /var/vcap/jobs/bosh-helper/config/root_ca_certificate \
+                #>>  $LOG_DIR/bosh-helper.stdout.log \
+                #2>> $LOG_DIR/bosh-helper.stderr.log
+                #
+                #bosh -e vbox \
+                #    login < /var/vcap/jobs/bosh-helper/config/director_credentials \
+                #>>  $LOG_DIR/bosh-helper.stdout.log2 \
+                #2>> $LOG_DIR/bosh-helper.stderr.log2
+
+                if [ $? -eq 0 ]; then
+                    # TODO: set sleep time according to ?
+                    sleep 7199
+                else
+                    exit 1
+                fi
+            done
+        fi
+
+        ;;
+
+    stop)
+        PID=$(head -1 $PIDFILE)
+        kill -9 `ps -o pid --no-headers --ppid $PID`
+        kill -9 $PID
+        rm -f $PIDFILE
+        set -e
+
+        ;;
+
+    *)
+        echo "Usage: ctl {start|stop}" ;;
+
+esac
