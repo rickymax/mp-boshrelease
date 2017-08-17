@@ -18,8 +18,8 @@ networks:
     static:   # BOSH assigns IPs from this range to jobs requesting static IPs
     - 192.168.100.240 - 192.168.100.243
     cloud_properties:
-      net_id: e3fc624a-cdbc-4ec9-b6c1-d9316f0c41ad # OpenStack network ID
-      subnet: 15da4c5c-6ace-4638-9788-ee68e2293bec # OpenStack subnet ID
+      net_id: NET_ID # OpenStack network ID
+      subnet: SUBNET_ID # OpenStack subnet ID
 
 resource_pools:
 - name: default
@@ -53,6 +53,11 @@ jobs:
   - name: default
 
 properties:
+  bosh-helper:
+    url: URL
+    username: USERNAME
+    password: PASSWORD
+    ca_cert: CA_CERT
   cf-helper:
     api_url: API_URL
     username: USERNAME
